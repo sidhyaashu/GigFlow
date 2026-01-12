@@ -11,7 +11,7 @@ const MyGigsPage = () => {
         skip: !userInfo,
     });
 
-    console.log(data)
+    console.log(gigs)
 
     return (
         <>
