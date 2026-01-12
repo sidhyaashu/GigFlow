@@ -12,14 +12,5 @@ export default defineConfig(({ mode }) => {
                 "@": path.resolve(__dirname, "./src"),
             },
         },
-        server: {
-            proxy: {
-                '/api': {
-                    target: env.VITE_BACKEND_URL || 'https://gigflow-backend-bj4g.onrender.com',
-                    changeOrigin: true,
-                    secure: false,
-                },
-            },
-        },
     }
 })
