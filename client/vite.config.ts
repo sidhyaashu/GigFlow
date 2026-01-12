@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
         server: {
             proxy: {
                 '/api': {
-                    target: env.VITE_BACKEND_URL || 'https://gigflow-backend-production.up.railway.app',
+                    target: env.VITE_BACKEND_URL || 'https://gigflow-backend-bj4g.onrender.com',
                     changeOrigin: true,
                     secure: false,
                 },

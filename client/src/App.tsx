@@ -15,7 +15,7 @@ function App() {
 
     useEffect(() => {
         if (userInfo) {
-            const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://gigflow-backend-production.up.railway.app';
+            const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://gigflow-backend-bj4g.onrender.com';
             const socket = io(backendUrl);
             socket.emit('join', userInfo._id);
 
