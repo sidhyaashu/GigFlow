@@ -60,8 +60,8 @@ GigFlow is a lightweight freelance marketplace platform built as a full-stack in
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/gigflow.git
-cd gigflow
+git clone https://github.com/sidhyaashu/GigFlow.git
+cd GigFlow
 ```
 
 ### 2. Backend Setup
@@ -71,7 +71,6 @@ npm install
 ```
 Create a `.env` file in the `server` directory (see `.env.example`).
 ```bash
-npm run seed  # Optional: Seed the DB with 100+ dummy records
 npm run dev   # Starts server on http://localhost:5000
 ```
 
@@ -106,6 +105,6 @@ npm run dev   # Starts client on http://localhost:5173
 ---
 
 ## 📝 Submission Details
-- **Developer**: [Your Name]
-- **Contact**: [Your Email]
-- **Loom Demo**: [Link to Video]
+- **Developer**: Asutosh Sidhya
+- **Contact**: ashutoshsidhya69@gmail.com
+- **Loom Demo**: 
