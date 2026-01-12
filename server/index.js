@@ -20,13 +20,20 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Enable trust proxy for Render/Railway (required for secure cookies)
+app.set("trust proxy", 1);
+
 /* -------------------- SECURITY -------------------- */
 app.use(helmet());
 
 app.use(
   cors({
-    origin: (origin, cb) => cb(null, true), // Railway-safe
+    origin: [
+      "https://gig-flow-rho.vercel.app",
+    ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -63,7 +70,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: (origin, cb) => cb(null, true),
+    origin: "https://gig-flow-rho.vercel.app",
     credentials: true,
   },
 });
