@@ -1,82 +1,91 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const http = require('http');
-const { Server } = require('socket.io');
-const connectDB = require('./config/db.js');
-const morgan = require('morgan');
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const http = require("http");
+const { Server } = require("socket.io");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const morgan = require("morgan");
 
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+const connectDB = require("./config/db.js");
+
+// Routes
+const authRoutes = require("./routes/auth.js");
+const gigRoutes = require("./routes/gigs.js");
+const bidRoutes = require("./routes/bids.js");
 
 dotenv.config();
-
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security Middleware
+/* -------------------- SECURITY -------------------- */
 app.use(helmet());
 
-// Rate Limiting
-const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, 
-  max: 100, 
-});
-app.use(limiter);
+app.use(
+  cors({
+    origin: (origin, cb) => cb(null, true), // Railway-safe
+    credentials: true,
+  })
+);
 
+/* -------------------- PARSERS -------------------- */
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
-  credentials: true,
-}));
+app.use(morgan("dev"));
 
-app.use(morgan('dev'));
+/* -------------------- HEALTH CHECK (Railway) -------------------- */
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
-// Socket.io Setup
+/* -------------------- RATE LIMITING -------------------- */
+app.use(
+  rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 100,
+    skip: (req) => req.path === "/health",
+  })
+);
+
+/* -------------------- ROUTES -------------------- */
+app.use("/api/auth", authRoutes);
+app.use("/api/gigs", gigRoutes);
+app.use("/api/bids", bidRoutes);
+
+app.get("/", (req, res) => {
+  res.send("🚀 GigFlow API running on Railway");
+});
+
+/* -------------------- SOCKET.IO -------------------- */
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, cb) => cb(null, true),
     credentials: true,
   },
 });
 
-app.set('io', io);
+app.set("io", io);
 
-io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
+io.on("connection", (socket) => {
+  console.log("🔌 Socket connected:", socket.id);
 
-  socket.on('join', (userId) => {
-      socket.join(userId);
-      console.log(`User ${userId} joined room`);
+  socket.on("join", (userId) => {
+    if (!userId) return;
+    socket.join(userId);
+    console.log(`👤 User ${userId} joined room`);
   });
 
-  socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
+  socket.on("disconnect", (reason) => {
+    console.log("❌ Socket disconnected:", socket.id, reason);
   });
 });
 
-
-
-// Routes
-const authRoutes = require('./routes/auth');
-const gigRoutes = require('./routes/gigs');
-const bidRoutes = require('./routes/bids');
-
-app.use('/api/auth', authRoutes);
-app.use('/api/gigs', gigRoutes);
-app.use('/api/bids', bidRoutes);
-
-app.get('/', (req, res) => {
-  res.send('GigFlow API is running...');
-});
-
-// Start Server
-server.listen(PORT, () => {
-  connectDB();
-  console.log(`Server running on port ${PORT}`);
+/* -------------------- START SERVER -------------------- */
+server.listen(PORT, async () => {
+  await connectDB();
+  console.log(`✅ Server running on port ${PORT}`);
 });

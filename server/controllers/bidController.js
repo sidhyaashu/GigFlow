@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Bid = require('../models/Bid');
-const Gig = require('../models/Gig');
+const Bid = require('../models/Bid.js');
+const Gig = require('../models/Gig.js');
 
 // @desc    Submit a bid for a gig
 // @route   POST /api/bids

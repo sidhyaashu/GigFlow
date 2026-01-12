@@ -17,8 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'], // Keeping it simple as per requirements "Roles are fluid" but we might track if they are acting as client/freelancer. 
-    // Actually req says "Any user can post a job or bid", so role might not be needed strict, but good to have generic 'user'.
+    enum: ['user', 'admin'],
     default: 'user',
   },
 }, {

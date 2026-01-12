@@ -1,4 +1,4 @@
-const Gig = require('../models/Gig');
+const Gig = require('../models/Gig.js');
 
 // @desc    Get all open gigs (with search)
 // @route   GET /api/gigs
