@@ -1,7 +1,5 @@
 const Gig = require('../models/Gig');
 
-const redisClient = require('../config/redis');
-
 // @desc    Get all open gigs (with search)
 // @route   GET /api/gigs
 // @access  Public
@@ -16,36 +14,10 @@ const getGigs = async (req, res) => {
         }
       : {};
 
-    const cacheKey = `gigs:${JSON.stringify(keyword)}`;
-
-    // Check Cache
-    if (redisClient.isOpen) {
-        try {
-            const cachedGigs = await redisClient.get(cacheKey);
-            if (cachedGigs) {
-                console.log('Serving from Cache');
-                return res.json(JSON.parse(cachedGigs));
-            }
-        } catch (error) {
-            console.error('Redis Get Error:', error);
-        }
-    }
-
     // Only return open gigs
     const gigs = await Gig.find({ ...keyword, status: 'open' })
       .populate('ownerId', 'name email') // Populate owner info
       .sort({ createdAt: -1 });
-
-    // Set Cache (expires in 60s)
-    if (redisClient.isOpen) {
-        try {
-            await redisClient.set(cacheKey, JSON.stringify(gigs), {
-                EX: 60
-            });
-        } catch (error) {
-            console.error('Redis Set Error:', error);
-        }
-    }
 
     res.json(gigs);
   } catch (err) {
@@ -68,18 +40,6 @@ const createGig = async (req, res) => {
     });
 
     const createdGig = await gig.save();
-
-    // Clear Cache
-    if (redisClient.isOpen) {
-        try {
-            const keys = await redisClient.keys('gigs:*');
-            if (keys.length > 0) {
-                await redisClient.del(keys);
-            }
-        } catch (error) {
-            console.error('Redis Clear Error:', error);
-        }
-    }
     
     res.status(201).json(createdGig);
   } catch (err) {

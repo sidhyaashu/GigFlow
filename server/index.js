@@ -9,8 +9,6 @@ const connectDB = require('./config/db.js');
 const morgan = require('morgan');
 
 const helmet = require('helmet');
-const xss = require('xss-clean');
-const mongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 
 dotenv.config();
@@ -21,21 +19,18 @@ const PORT = process.env.PORT || 5000;
 
 // Security Middleware
 app.use(helmet());
-app.use(xss());
-app.use(mongoSanitize());
 
 // Rate Limiting
 const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 10 * 60 * 1000, 
+  max: 100, 
 });
 app.use(limiter);
 
-// Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173', // Vite default port
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
 }));
 
@@ -50,7 +45,7 @@ const io = new Server(server, {
   },
 });
 
-app.set('io', io); // Make io accessible in routes
+app.set('io', io);
 
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
@@ -65,7 +60,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Database Connection
 
 
 // Routes

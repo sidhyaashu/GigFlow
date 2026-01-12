@@ -122,19 +122,6 @@ const hireFreelancer = async (req, res) => {
     const io = req.app.get('io');
     io.to(bid.freelancerId.toString()).emit('notification', { message: `You have been hired for ${gig.title}` });
 
-    // Clear Cache (As gig is no longer open)
-    const redisClient = require('../config/redis'); // Lazy load to avoid circular dep if needed, or better move to top if clean
-    try {
-        if(redisClient.isOpen) {
-             const keys = await redisClient.keys('gigs:*');
-             if (keys.length > 0) {
-                 await redisClient.del(keys);
-             }
-        }
-    } catch(e) {
-        console.error("Cache clear error", e);
-    }
-
     res.json({ message: 'Freelancer hired successfully', bid });
   } catch (err) {
     await session.abortTransaction();
