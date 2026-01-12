@@ -11,7 +11,7 @@ export const bidsApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ['Bid'],
         }),
         getGigBids: builder.query({
-            query: (gigId: string) => `/bids/${gigId}`,
+            query: (gigId: string) => `https://gigflow-backend-bj4g.onrender.com/bids/${gigId}`,
             providesTags: ['Bid'],
         }),
         hireFreelancer: builder.mutation({
