@@ -4,7 +4,7 @@ export const bidsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder: any) => ({
         submitBid: builder.mutation({
             query: (data: any) => ({
-                url: '/bids',
+                url: 'https://gigflow-backend-bj4g.onrender.com/bids',
                 method: 'POST',
                 body: data,
             }),
@@ -16,7 +16,7 @@ export const bidsApiSlice = apiSlice.injectEndpoints({
         }),
         hireFreelancer: builder.mutation({
             query: ({ bidId }: { bidId: string }) => ({
-                url: `/bids/${bidId}/hire`,
+                url: `https://gigflow-backend-bj4g.onrender.com/bids/${bidId}/hire`,
                 method: 'PATCH',
             }),
             invalidatesTags: ['Bid', 'Gig'], // Invalidate Gig to update status to assigned
