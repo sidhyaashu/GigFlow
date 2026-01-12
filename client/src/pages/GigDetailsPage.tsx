@@ -28,12 +28,10 @@ const GigDetailsPage = () => {
     const [submitBid, { isLoading: isSubmittingBid }] = useSubmitBidMutation();
     const [submitError, setSubmitError] = useState('');
 
-    // Owner: Fetch Bids
     const { data: bids, isLoading: isBidsLoading } = useGetGigBidsQuery(gigId, {
         skip: !isOwner,
     });
 
-    // Hiring
     const [hireFreelancer] = useHireFreelancerMutation();
 
     const handleBidSubmit = async (e: React.FormEvent) => {

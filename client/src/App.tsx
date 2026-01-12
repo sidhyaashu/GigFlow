@@ -15,7 +15,7 @@ function App() {
 
     useEffect(() => {
         if (userInfo) {
-            const socket = io('http://localhost:5000');
+            const socket = io('https://gigflow-backend-production.up.railway.app');
             socket.emit('join', userInfo._id);
 
             socket.on('notification', (data: any) => {
