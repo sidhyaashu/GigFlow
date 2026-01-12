@@ -4,25 +4,25 @@ export const gigsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder: any) => ({
         getGigs: builder.query({
             query: (keyword: string) => ({
-                url: '/gigs',
+                url: 'https://gigflow-backend-bj4g.onrender.com/api/gigs',
                 params: { search: keyword },
             }),
             providesTags: ['Gig'],
         }),
         createGig: builder.mutation({
             query: (data: any) => ({
-                url: '/gigs',
+                url: 'https://gigflow-backend-bj4g.onrender.com/api/gigs',
                 method: 'POST',
                 body: data,
             }),
             invalidatesTags: ['Gig'],
         }),
         getMyGigs: builder.query({
-            query: () => '/gigs/my-gigs',
+            query: () => 'https://gigflow-backend-bj4g.onrender.com/api/gigs/my-gigs',
             providesTags: ['Gig'],
         }),
         getGigById: builder.query({
-            query: (id: string) => `/gigs/${id}`,
+            query: (id: string) => `https://gigflow-backend-bj4g.onrender.com/api/gigs/${id}`,
             providesTags: ['Gig'],
         }),
     }),
