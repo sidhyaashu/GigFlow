@@ -15,11 +15,12 @@ function App() {
 
     useEffect(() => {
         if (userInfo) {
-            const socket = io('https://gigflow-backend-production.up.railway.app');
+            const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://gigflow-backend-production.up.railway.app';
+            const socket = io(backendUrl);
             socket.emit('join', userInfo._id);
 
             socket.on('notification', (data: any) => {
-                alert(data.message); // Simple alert for notification
+                alert(data.message);
             });
 
             return () => {
