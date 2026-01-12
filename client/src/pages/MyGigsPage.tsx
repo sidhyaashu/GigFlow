@@ -11,6 +11,8 @@ const MyGigsPage = () => {
         skip: !userInfo,
     });
 
+    console.log(data)
+
     return (
         <>
             <Navbar />
