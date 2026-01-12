@@ -13,7 +13,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'https://gigflow-backend-production.up.railway.app/',
+                target: 'https://gigflow-backend-production.up.railway.app',
                 changeOrigin: true,
                 secure: false,
             },
